@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">Memo</string>
+    <string name="setting">Setting</string>
+    <string name="cards">Cards</string>
+    <string name="keyboard">Keyboard</string>
+    <string name="github">https://github.com/LeerRonin/Memo</string>
 </resources>

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <paths>
+        <files-path path="/storage/emulated/0/Documents/Memo" name="Memo" />
+    </paths>
+</PreferenceScreen>

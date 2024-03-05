@@ -1,110 +1,99 @@
 package com.atmos.memo.screens
 
+import android.content.Intent
+import android.net.Uri
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import com.atmos.memo.R
-import com.atmos.memo.ui.theme.MemoTheme
+import com.atmos.memo.ui.ellements.CustomRow
+import com.atmos.memo.ui.ellements.MemoScreen
+import com.atmos.memo.utils.MyPreview
 
 @Composable
-fun HomeScreen(navController : NavController){
-    MemoTheme {
-        Surface (
-            Modifier
-                .fillMaxSize()
-        )
-            {
-                Column(
-                    horizontalAlignment = Alignment.Start,
-                    verticalArrangement = Arrangement.Top,
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(20.dp)
-                ) {
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                    ) {
-                        Text(
-                            stringResource(R.string.app_name),
-                            textAlign = TextAlign.Center,
-                            fontSize = 40.sp,
-                            color = MaterialTheme.colorScheme.primary
-                        )
-                        TextButton(
-                            onClick = { navController.navigate("SettingScreen") },
-                            modifier = Modifier.size(80.dp),
-                        ) {
-                            Image(
-                                painter = painterResource(R.drawable.baseline_settings_24),
-                                contentDescription = "Cards",
-                                colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.primary)
-                            )
+fun HomeScreen(navController: NavController) {
 
-                        }
-                    }
-                    Column(
-                        modifier = Modifier
-                            .fillMaxSize(),
-                        verticalArrangement = Arrangement.SpaceEvenly
+    val context = LocalContext.current
+    val openGitHubLauncher =
+        rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            // Handle the result if needed
+        }
 
-                    ) {
-                        TextButton(
-                            onClick = { navController.navigate("CardsScreen") },
-                            modifier = Modifier.fillMaxWidth()
-                        ) {
-                            Image(
-                                modifier = Modifier.size(100.dp),
-                                painter = painterResource(R.drawable.playing_cards),
-                                contentDescription = "Cards",
-                                colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.primary)
-                            )
+    val githubUri = Uri.parse(context.getString(R.string.github))
+    val intent = Intent(Intent.ACTION_VIEW, githubUri)
 
-                        }
-                        TextButton(
-                            onClick = { navController.navigate("KeyboardScreen") },
-                            modifier = Modifier.fillMaxWidth()
-                        ) {
-                            Image(
-                                modifier = Modifier.size(100.dp),
-                                painter = painterResource(R.drawable.baseline_keyboard_24),
-                                contentDescription = "Keyboard",
-                                colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.primary)
-                            )
-                        }
-                    }
-                }
+    MemoScreen {
+        CustomRow(stringResource(R.string.app_name), R.drawable.baseline_edit_24, "File Edit") {
+            navController.navigate("FileEdit")
+        }
+        Column(
+            modifier = Modifier
+                .fillMaxSize(),
+            verticalArrangement = Arrangement.SpaceEvenly,
+            horizontalAlignment = Alignment.CenterHorizontally
+
+        ) {
+            TextButton(
+                onClick = { navController.navigate("CardsScreen") },
+                modifier = Modifier.size(200.dp)
+            ) {
+                Image(
+                    modifier = Modifier.size(200.dp),
+                    painter = painterResource(R.drawable.playing_cards),
+                    contentDescription = "Cards",
+                    colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.primary)
+                )
+
+            }
+            TextButton(
+                onClick = { navController.navigate("KeyboardScreen") },
+                modifier = Modifier.size(200.dp),
+            ) {
+                Image(
+                    modifier = Modifier.size(200.dp),
+                    painter = painterResource(R.drawable.baseline_keyboard_24),
+                    contentDescription = "Keyboard",
+                    colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.primary)
+                )
+            }
+            TextButton(
+                onClick = {
+                    openGitHubLauncher.launch(intent)
+                },
+                modifier = Modifier.size(50.dp),
+            ) {
+                Image(
+                    modifier = Modifier.size(50.dp),
+                    painter = painterResource(R.drawable.github_142_svgrepo_com),
+                    contentDescription = "Github",
+                    colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.primary)
+                )
             }
         }
-    }
 
+    }
+}
 
 @Preview
 @Composable
-fun MyPreview(){
-    val navController = rememberNavController()
-    HomeScreen(navController)
+fun MyScreenPreview() {
+    MyPreview(screenContent = { navController ->
+        HomeScreen(navController = navController)
+    })
 }
